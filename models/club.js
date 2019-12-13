@@ -1,5 +1,9 @@
 const mongoose = require("mongoose");
 
+// EMBEDDED MODELS
+
+// Response Model is embedded into the Thread Model, the the Thread Model is embedded into the Club Schema
+
 const responseSchema = new mongoose.Schema({
   text: { type: String },
   profileImageURL: { type: String },
