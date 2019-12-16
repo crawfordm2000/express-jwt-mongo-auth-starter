@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 const Club = require("../models/club").Club;
+const Thread = require("../models/club").Thread;
 
 //INDEX for all Clubs
 
@@ -57,6 +58,25 @@ router.put("/:id", (request, response) => {
 // })
 
 // POST a Thread to a Club
+
+router.post("/:id/threads", (request, response) => {
+  const newThread = new Thread({
+    title: request.body.title,
+    prompt: request.body.prompt,
+    thumbnailURL: request.body.thumbnailURL,
+    backdropURL: request.body.backdropURL,
+    responses: []
+  });
+
+  Club.findById(request.params.id, (error, foundClub) => {
+    foundClub.threads.push(newThread);
+
+    foundClub.save((error, savedClub) => {
+      response.json(savedClub);
+    });
+    newThread.save();
+  });
+});
 
 // POST a Response to a Thread on a Club
 
