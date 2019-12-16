@@ -21,7 +21,7 @@ const threadSchema = new mongoose.Schema({
 });
 
 const clubSchema = new mongoose.Schema({
-  title: { type: String },
+  title: { type: String, required: true },
   description: { type: String },
   currentTopic: { type: String },
   currentMovieURL: { type: String },
