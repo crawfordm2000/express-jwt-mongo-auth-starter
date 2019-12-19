@@ -83,18 +83,16 @@ router.get("/:id",  (req, res) => {
   });
 });
 
-// POST a Club with embedded in a User
-
 router.post("/:id/clubs", (request, response) => {
   const newClub = new Club({
     title: request.body.title,
     description: request.body.description,
     currentTopic: request.body.currentTopic,
-    currentMovieURL: request.body.currentMovieURL,
+    thumbnailURL: request.body.thumbnailURL,
+    backdropURL: request.body.backdropURL,
     threads: [],
     members: []
   });
-
   User.findById(request.params.id, (error, foundUser) => {
     foundUser.clubs.push(newClub);
     newClub.members.push(foundUser);

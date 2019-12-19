@@ -9,8 +9,8 @@ const cors = require("cors");
 
 var app = express();
 
-//mongodb://localhost:27017/express-jwt-mongo-auth-starter
-
+//process.env.MONGODB_URI
+//"mongodb://localhost:27017/express-jwt-mongo-auth-starter"
 mongoose.connect(process.env.MONGODB_URI, {
   useUnifiedTopology: true,
   useNewUrlParser: true,
