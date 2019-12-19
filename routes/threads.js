@@ -59,6 +59,12 @@ router.post('/:id/responses', (req, res) => {
         res.json(newResponse)
       })
     })
+  });
+
+  router.get("/:id/responses", (request, response) => {
+    Thread.findById(request.params.id, (error, foundThread) => {
+      response.json(foundThread.responses)
+    })
   })
 
 module.exports = router;

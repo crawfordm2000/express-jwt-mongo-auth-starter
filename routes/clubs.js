@@ -51,7 +51,18 @@ router.put("/:id", (request, response) => {
   });
 });
 
+
+// GET Threads for a specific Club 
+
+router.get("/:id/threads", (request, response) => {
+  Club.findById(request.params.id, (error, foundClub) => {
+    response.json(foundClub.threads)
+  })
+})
+
 // POST a new Member to a Club
+
+
 
 // router.put("/:id/users/:userId", (request, response) => {
 
@@ -69,12 +80,14 @@ router.post("/:id/threads", (request, response) => {
   });
 
   Club.findById(request.params.id, (error, foundClub) => {
-    foundClub.threads.push(newThread);
-
-    foundClub.save((error, savedClub) => {
-      response.json(savedClub);
-    });
-    newThread.save();
+    if(error) {response.json(error)} 
+    else {
+      foundClub.threads.push(newThread);
+      foundClub.save((error, savedClub) => {
+        response.json(savedClub);
+      });
+      newThread.save();
+    }   
   });
 });
 

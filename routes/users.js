@@ -6,6 +6,7 @@ const passport = require("../config/passport");
 const config = require("../config/config");
 const User = require("../models/User");
 const Club = require("../models/club").Club;
+const mongoose = require("mongoose");
 
 /* GET users listing. */
 router.get("/", (req, res) => {
@@ -16,12 +17,15 @@ router.get("/", (req, res) => {
 
 /* SIGNUP a user. */
 router.post("/signup", (req, res) => {
-  if (req.body.email && req.body.password) {
+  if (req.body.username && req.body.password) {
     let newUser = {
-      email: req.body.email,
-      password: req.body.password
+      username: req.body.username,
+      password: req.body.password,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email
     };
-    User.findOne({ email: req.body.email }).then(user => {
+    User.findOne({ username: req.body.username }).then(user => {
       if (!user) {
         User.create(newUser).then(user => {
           res.json({ user });
@@ -66,18 +70,16 @@ router.post("/", (req, res) => {
   });
 });
 
-router.get("/:id", jwtCheck({ secret: config.jwtSecret }), (req, res) => {
-  let decoded = jwt.decode(
-    req.headers.authorization.split(" ")[1],
-    config.jwtSecret
-  );
+router.get("/:id",  (req, res) => {
+  // let decoded = jwt.decode(
+  //   req.headers.authorization.split(" ")[1],
+  //   config.jwtSecret
+  // );
 
   User.findById(req.params.id).then(user => {
-    if (user.id === decoded.id) {
+  
       res.json(user);
-    } else {
-      res.json({ message: "You are not authorized to see that" });
-    }
+    
   });
 });
 
@@ -102,5 +104,26 @@ router.post("/:id/clubs", (request, response) => {
     newClub.save();
   });
 });
+
+router.delete('/:id', (req, res) => {
+  User.findByIdAndRemove(req.params.id, req.body, (_error, deletedUser) => {
+      if(!_error){
+          console.log("Deleted");
+      } else {
+        response.json({deletedUser})
+      }
+  })
+})
+
+router.put("/:id", (req, res)=> {
+  User.update({ _id: mongoose.Types.ObjectId(req.params.id) },req.body,{ new: true })
+  .then((success,doc) => {
+      console.log(doc,success)
+    res.json({doc});
+  })
+  .catch((err) => {
+      res.status(404).send(err);
+  });
+})
 
 module.exports = router;
