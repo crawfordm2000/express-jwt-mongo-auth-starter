@@ -16,7 +16,7 @@ mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useCreateIndex: true
 });
-
+// hello
 mongoose.connection.once("open", () => {
   console.log("connected to mongo");
 });
